@@ -12,7 +12,8 @@ let consoleNetwork, networkConfig, ozNetworkName
 
 const commander = require('commander');
 const program = new commander.Command()
-program.option('-r --ropsten', 'run the migrations against ropsten', () => true)
+program.option('-p --ropsten', 'run the migrations against ropsten', () => true)
+program.option('-r --rinkeby', 'run the migrations against ropsten', () => true)
 program.option('-v --verbose', 'make all commands verbose', () => true)
 program.parse(process.argv)
 
@@ -26,7 +27,17 @@ if (program.ropsten) {
 
   // The OpenZeppelin SDK network config that oz-console should use as reference
   networkConfig = '.openzeppelin/ropsten.json'
-} else {
+} else if (program.rinkeby) {
+  console.log(chalk.green('Selected network is rinkeby'))
+  // The network that the oz-console app should talk to.  (should really just use the ozNetworkName)
+  consoleNetwork = 'rinkeby'
+
+  // The OpenZeppelin SDK network name
+  ozNetworkName = 'rinkeby'
+
+  // The OpenZeppelin SDK network config that oz-console should use as reference
+  networkConfig = '.openzeppelin/rinkeby.json'
+}else {
   console.log(chalk.green('Selected network is local'))
   
   // The network that the oz-console app should talk to.  (should really just use the ozNetworkName)
@@ -88,11 +99,12 @@ async function migrate() {
   } = context
   
   await migration.migrate(20, () => {
-    runShell(`oz create Sai ${ozOptions} --network ${ozNetworkName} --init initialize --args '${signer.address},"Sai","Sai",18'`)
+    runShell(`oz create Sai ${ozOptions} --network ${ozNetworkName} --init initialize --args '${process.env.ADMIN_ADDRESS},"Sai","Sai",18'`)
+    context = loadContext()
   })
 
   await migration.migrate(24, () => {
-    runShell(`oz create Dai ${ozOptions} --network ${ozNetworkName} --init initialize --args '${signer.address},"Dai","Dai",18'`)
+    runShell(`oz create Dai ${ozOptions} --network ${ozNetworkName} --init initialize --args '${process.env.ADMIN_ADDRESS},"Dai","Dai",18'`)
     context = loadContext()
   })
 
@@ -128,7 +140,7 @@ async function migrate() {
   const feeFraction = ethers.utils.parseEther('0.05')
 
   await migration.migrate(40, async () => {
-    runShell(`oz create PoolSai ${ozOptions} --network ${ozNetworkName} --init init --args '${signer.address},${context.contracts.cSai.address},${feeFraction},${signer.address},${lockDuration},${cooldownDuration}'`)
+    runShell(`oz create PoolSai ${ozOptions} --network ${ozNetworkName} --init init --args '${process.env.ADMIN_ADDRESS},${context.contracts.cSai.address},${feeFraction},${process.env.ADMIN_ADDRESS},${lockDuration},${cooldownDuration}'`)
     context = loadContext()
   })
 
@@ -142,7 +154,7 @@ async function migrate() {
   })
 
   await migration.migrate(50, async () => {
-    runShell(`oz create PoolDai ${ozOptions} --network ${ozNetworkName} --init init --args '${signer.address},${context.contracts.cDai.address},${feeFraction},${signer.address},${lockDuration},${cooldownDuration}'`)
+    runShell(`oz create PoolDai ${ozOptions} --network ${ozNetworkName} --init init --args '${process.env.ADMIN_ADDRESS},${context.contracts.cDai.address},${feeFraction},${process.env.ADMIN_ADDRESS},${lockDuration},${cooldownDuration}'`)
     context = loadContext()
   })
 
@@ -175,7 +187,7 @@ async function migrate() {
   })
 
   // await migration.migrate(80, () => {
-  //   runShell(`oz create Usdc ${ozOptions} --network ${ozNetworkName} --init initialize --args '${signer.address},"Usdc","Usdc",6'`)
+  //   runShell(`oz create Usdc ${ozOptions} --network ${ozNetworkName} --init initialize --args '${process.env.ADMIN_ADDRESS},"Usdc","Usdc",6'`)
   //   context = loadContext()
   // })
 
@@ -185,7 +197,7 @@ async function migrate() {
   // })
 
   // await migration.migrate(90, async () => {
-  //   runShell(`oz create PoolUsdc ${ozOptions} --network ${ozNetworkName} --init init --args '${signer.address},${context.contracts.cUsdc.address},${feeFraction},${signer.address},${lockDuration},${cooldownDuration}'`)
+  //   runShell(`oz create PoolUsdc ${ozOptions} --network ${ozNetworkName} --init init --args '${process.env.ADMIN_ADDRESS},${context.contracts.cUsdc.address},${feeFraction},${process.env.ADMIN_ADDRESS},${lockDuration},${cooldownDuration}'`)
   //   context = loadContext()
   // })
 

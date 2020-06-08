@@ -9,7 +9,8 @@ module.exports = {
       port: 8545,
       gas: 8000000,
       gasPrice: 5e9,
-      network_id: '*'
+      network_id: '*',
+      from: '0x17a4dC4aF1FAF9c3Db0515a170491c37eb0373Dc'
     },
 
     rinkeby: {
@@ -21,7 +22,7 @@ module.exports = {
       ),
       network_id: 4,
       gas: 9500000,
-      gasPrice: 20.1 * 1000000000
+      gasPrice: 20.1 * 10000000000
     },
 
     ropsten: {
