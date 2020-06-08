@@ -12,20 +12,20 @@ let consoleNetwork, networkConfig, ozNetworkName
 
 const commander = require('commander');
 const program = new commander.Command()
-program.option('-r --rinkeby', 'run the migrations against rinkeby', () => true)
+program.option('-r --ropsten', 'run the migrations against ropsten', () => true)
 program.option('-v --verbose', 'make all commands verbose', () => true)
 program.parse(process.argv)
 
-if (program.rinkeby) {
-  console.log(chalk.green('Selected network is rinkeby'))
+if (program.ropsten) {
+  console.log(chalk.green('Selected network is ropsten'))
   // The network that the oz-console app should talk to.  (should really just use the ozNetworkName)
-  consoleNetwork = 'rinkeby'
+  consoleNetwork = 'ropsten'
 
   // The OpenZeppelin SDK network name
-  ozNetworkName = 'rinkeby'
+  ozNetworkName = 'ropsten'
 
   // The OpenZeppelin SDK network config that oz-console should use as reference
-  networkConfig = '.openzeppelin/rinkeby.json'
+  networkConfig = '.openzeppelin/ropsten.json'
 } else {
   console.log(chalk.green('Selected network is local'))
   
@@ -174,25 +174,25 @@ async function migrate() {
     console.log(`Mint tx receipt status: ${receipt.status}`)
   })
 
-  await migration.migrate(80, () => {
-    runShell(`oz create Usdc ${ozOptions} --network ${ozNetworkName} --init initialize --args '${signer.address},"Usdc","Usdc",6'`)
-    context = loadContext()
-  })
+  // await migration.migrate(80, () => {
+  //   runShell(`oz create Usdc ${ozOptions} --network ${ozNetworkName} --init initialize --args '${signer.address},"Usdc","Usdc",6'`)
+  //   context = loadContext()
+  // })
 
-  await migration.migrate(85, () => {
-    runShell(`oz create cUsdc ${ozOptions} --network ${ozNetworkName} --init initialize --args ${context.contracts.Usdc.address},${supplyRateMantissa}`)
-    context = loadContext()
-  })
+  // await migration.migrate(85, () => {
+  //   runShell(`oz create cUsdc ${ozOptions} --network ${ozNetworkName} --init initialize --args ${context.contracts.Usdc.address},${supplyRateMantissa}`)
+  //   context = loadContext()
+  // })
 
-  await migration.migrate(90, async () => {
-    runShell(`oz create PoolUsdc ${ozOptions} --network ${ozNetworkName} --init init --args '${signer.address},${context.contracts.cUsdc.address},${feeFraction},${signer.address},${lockDuration},${cooldownDuration}'`)
-    context = loadContext()
-  })
+  // await migration.migrate(90, async () => {
+  //   runShell(`oz create PoolUsdc ${ozOptions} --network ${ozNetworkName} --init init --args '${signer.address},${context.contracts.cUsdc.address},${feeFraction},${signer.address},${lockDuration},${cooldownDuration}'`)
+  //   context = loadContext()
+  // })
 
-  await migration.migrate(95, async () => {
-    runShell(`oz create PoolUsdcToken ${ozOptions} --network ${ozNetworkName} --init init --args '"Pool Usdc","poolUsdc",[],${context.contracts.PoolUsdc.address},6'`)
-    context = loadContext()
-  })
+  // await migration.migrate(95, async () => {
+  //   runShell(`oz create PoolUsdcToken ${ozOptions} --network ${ozNetworkName} --init init --args '"Pool Usdc","poolUsdc",[],${context.contracts.PoolUsdc.address},6'`)
+  //   context = loadContext()
+  // })
 
   console.log({ add: context.contracts.PoolUsdcToken})
   await migration.migrate(100, async () => {
@@ -206,10 +206,10 @@ async function migrate() {
     context = loadContext()
   })
 
-  await migration.migrate(130, async () => {
-    runShell(`oz create UsdcPod ${ozOptions} --network ${ozNetworkName} --init initialize --args ${context.contracts.PoolUsdc.address}`)
-    context = loadContext()
-  })
+  // await migration.migrate(130, async () => {
+  //   runShell(`oz create UsdcPod ${ozOptions} --network ${ozNetworkName} --init initialize --args ${context.contracts.PoolUsdc.address}`)
+  //   context = loadContext()
+  // })
 }
 
 console.log(chalk.yellow('Started...'))
