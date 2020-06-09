@@ -89,7 +89,7 @@ async function migrate() {
 
   runShell(`oz compile ${ozOptions}`)
 
-  runShell(`oz session ${ozOptions} --network ${ozNetworkName} --from ${process.env.ADMIN_ADDRESS} --expires 3600 --timeout 600`)
+  runShell(`oz session ${ozOptions} --network ${ozNetworkName} --from ${process.env.ADMIN_ADDRESS} --expires 3600 --timeout 6000`)
 
   let context = loadContext()
 
