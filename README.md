@@ -69,7 +69,19 @@ $ oz create cSai  --network ropsten --init initialize --args '0x85045f5B0A85C982
 ```
 $ oz create cDai  --network ropsten --init initialize --args '0xb5e5d0f8c0cba267cd3d7035d6adc8eba7df7cdd,4960317460300'
 ```
-## PoolSai
+## PoolSai(0x0F4FBC370CC88AA241bB1341C46A57372A33CdF7)
 ```
 $ oz create PoolSai  --network ropsten --init init --args '0x51f595Ef681C3B3B6B6949FBbB36b7D98DAa15Bf,0xe813Ab215bB6e17eF0AfB82a7530308B7Fb29C92,50000000000000000,0x51f595Ef681C3B3B6B6949FBbB36b7D98DAa15Bf,40,1'
+```
+## PoolSaiToken(0x619519D9613A2aB9F57fe4c6F2fFF97188C87b17)
+```
+$ oz create PoolSaiToken --network ropsten --init init --args '"Pool Sai","poolSai",[],0x0F4FBC370CC88AA241bB1341C46A57372A33CdF7'
+```
+## PoolDai(0xf2aA19e67A137292a75e025b05a7e17Fc9fD8D69)
+```
+$ oz create PoolDai  --network ropsten --init init --args '0x51f595Ef681C3B3B6B6949FBbB36b7D98DAa15Bf,0xa004A0966F32D896B877E95E258d8A252b0D3cE0,50000000000000000,0x51f595Ef681C3B3B6B6949FBbB36b7D98DAa15Bf,40,1'
+```
+## PoolDaiToken(0x986544F0Ce73EEf261dbc3BB66de8920C81824e3)
+```
+$ oz create PoolDaiToken --network ropsten --init init --args '"Pool Dai","poolDai",[],0xf2aA19e67A137292a75e025b05a7e17Fc9fD8D69'
 ```
